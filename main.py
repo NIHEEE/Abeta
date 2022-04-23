@@ -1,13 +1,20 @@
+#The horizontal (x) and vertical (y) movement of the pictures.
+#Negative values not possible - for movement into opposite direction, please see comment above.
+
+x_movement = 7
+y_movement = -3
+
+#Do not edit below!
+
 import linecache
 import matplotlib
 from matplotlib import pyplot
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 
-red, blue, slicedresult, np1, np2 = [], [], [], [], []
-x_movement, y_movement = 0, 0
+red, blue = [], []
 
-def formatting(txtfile_name , array):
+def file_formatting(txtfile_name, array):
     imported_array = linecache.getlines(txtfile_name)
     for line in imported_array:
         line = line.replace('\n', '')
@@ -20,6 +27,7 @@ def formatting(txtfile_name , array):
 
     return array
 
+
 def moveX(arrayMoving, arrayStatic, pixelsAmount):
     for i in range(len(arrayStatic)):
         for c in range(pixelsAmount):
@@ -28,6 +36,7 @@ def moveX(arrayMoving, arrayStatic, pixelsAmount):
     for a in range(len(arrayMoving)):
         for z in range(pixelsAmount):
             arrayMoving[a].append(0)
+
 
 def moveY(arrayMoving, arrayStatic, pixelsAmount):
     for a in range(pixelsAmount):
@@ -40,11 +49,13 @@ def moveY(arrayMoving, arrayStatic, pixelsAmount):
         for i in range(len(arrayStatic[50])):
             arrayStatic[0].append(0)
 
+
 def subtraction(array1, array2, resultArray):
     for i in range(len(array1)):
         for j in range(len(array1[i])):
             difference = array1[i][j] - array2[i][j]
             resultArray[i].append(difference)
+
 
 def writetext(array, filename):
     with open(filename, 'w') as f:
@@ -57,29 +68,26 @@ def writetext(array, filename):
                     f.write('\t')
 
 
-def calculate_perxentages(input_array):
+def calculate_percentages(input_array):
     b = len(input_array)
     a = np.array(input_array)
     a[a > 0] = 0
     a = a[a != 0]
     print(f'Amount of pixels > 0: {len(a)}')
-    print(f'Amount of pixels in total {((b-x_movement)*(b-y_movement))}')
-    print(f'{len(a)/((b-x_movement)*(b-y_movement))*100}%')
-
-
-
+    print(f'Amount of pixels in total {((b - abs(x_movement)) * (b - abs(y_movement)))}')
+    print(f'{len(a) / ((b - abs(x_movement)) * (b - abs(y_movement))) * 100}%')
 
 
 def create_results(base, subtract):
     result = np.subtract(np.array(subtract, dtype=float), np.array(base, dtype=float), dtype=float)
-    slicedresult = result[y_movement:len(blue), x_movement:len(blue)]
+    slicedresult = result[abs(y_movement):len(blue) - abs(y_movement), abs(x_movement):len(blue) - abs(x_movement)]
 
-    calculate_perxentages(slicedresult)
+    calculate_percentages(slicedresult)
 
     fig = pyplot.figure()
-    cmap2 = matplotlib.colors.LinearSegmentedColormap.from_list('my_colormap', ['blue', 'white', 'red'], 256)
-    img2 = pyplot.imshow(slicedresult, cmap=cmap2, clim=(-0.1, 0.1))
-    pyplot.colorbar(img2, cmap=cmap2)
+    colormap = matplotlib.colors.LinearSegmentedColormap.from_list('my_colormap', ['blue', 'white', 'red'], 256)
+    img2 = pyplot.imshow(slicedresult, cmap=colormap, clim=(-0.1, 0.1))
+    pyplot.colorbar(img2, cmap=colormap)
     pyplot.xlabel('Amount of Pixels Horizontally')
     pyplot.ylabel('Amount of Pixels Vertically')
     fig.show()
@@ -88,23 +96,22 @@ def create_results(base, subtract):
     canvas.get_tk_widget().place(height=720, x=600, y=0)
 
 def main():
-    formatting('blue.txt', blue)
-    formatting('red.txt', red)
+    file_red = 'red.txt'
+    file_blue = 'blue.txt'
 
-    moveX(blue, red, x_movement)
-    moveY(blue, red, y_movement)
+    file_formatting(f'{file_blue}', blue)
+    file_formatting(f'{file_red}', red)
 
-    create_results(blue,red)
+    if x_movement >= 0:
+        moveX(blue, red, abs(x_movement))
+    else:
+        moveX(red, blue, abs(x_movement))
 
+    if y_movement >= 0:
+        moveY(blue, red, abs(y_movement))
+    else:
+        moveY(red, blue, abs(y_movement))
+
+    create_results(blue, red)
 
 main()
-
-
-
-
-
-
-
-
-
-
