@@ -1,5 +1,5 @@
 # The horizontal (x) and vertical (y) movement of the pictures.
-# Negative values not possible - for movement into opposite direction, please see comment above.
+# Negative values are possible for movement into opposite direction.
 
 x_movement = 0
 y_movement = 0
