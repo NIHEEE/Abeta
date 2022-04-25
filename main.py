@@ -1,19 +1,23 @@
-#The horizontal (x) and vertical (y) movement of the pictures.
-#Negative values not possible - for movement into opposite direction, please see comment above.
+# The horizontal (x) and vertical (y) movement of the pictures.
+# Negative values not possible - for movement into opposite direction, please see comment above.
 
-x_movement = 7
-y_movement = -3
+x_movement = 0
+y_movement = 0
 
-#Do not edit below!
+file_red = 'red.txt'
+file_blue = 'blue.txt'
+
+# Do not edit below!
 
 import linecache
 import matplotlib
 from matplotlib import pyplot
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 
 red, blue = [], []
 
+
+# Importing textfile, formatting it into arrays
 def file_formatting(txtfile_name, array):
     imported_array = linecache.getlines(txtfile_name)
     for line in imported_array:
@@ -28,6 +32,7 @@ def file_formatting(txtfile_name, array):
     return array
 
 
+# Movement of arrays horizontally where one of the arrays stays static
 def moveX(arrayMoving, arrayStatic, pixelsAmount):
     for i in range(len(arrayStatic)):
         for c in range(pixelsAmount):
@@ -38,6 +43,7 @@ def moveX(arrayMoving, arrayStatic, pixelsAmount):
             arrayMoving[a].append(0)
 
 
+# Movement of arrays vertically where one of the arrays stays static
 def moveY(arrayMoving, arrayStatic, pixelsAmount):
     for a in range(pixelsAmount):
         arrayMoving.append([])
@@ -50,13 +56,7 @@ def moveY(arrayMoving, arrayStatic, pixelsAmount):
             arrayStatic[0].append(0)
 
 
-def subtraction(array1, array2, resultArray):
-    for i in range(len(array1)):
-        for j in range(len(array1[i])):
-            difference = array1[i][j] - array2[i][j]
-            resultArray[i].append(difference)
-
-
+# Converting the image to a .txt file
 def writetext(array, filename):
     with open(filename, 'w') as f:
         for i in range(len(array)):
@@ -68,6 +68,7 @@ def writetext(array, filename):
                     f.write('\t')
 
 
+# Calculating percentage of pixels that are blue + print it to terminal
 def calculate_percentages(input_array):
     b = len(input_array)
     a = np.array(input_array)
@@ -78,12 +79,14 @@ def calculate_percentages(input_array):
     print(f'{len(a) / ((b - abs(x_movement)) * (b - abs(y_movement))) * 100}%')
 
 
+# Create results array and creating graphical image.
 def create_results(base, subtract):
     result = np.subtract(np.array(subtract, dtype=float), np.array(base, dtype=float), dtype=float)
     slicedresult = result[abs(y_movement):len(blue) - abs(y_movement), abs(x_movement):len(blue) - abs(x_movement)]
 
     calculate_percentages(slicedresult)
 
+    # Creating image
     fig = pyplot.figure()
     colormap = matplotlib.colors.LinearSegmentedColormap.from_list('my_colormap', ['blue', 'white', 'red'], 256)
     img2 = pyplot.imshow(slicedresult, cmap=colormap, clim=(-0.1, 0.1))
@@ -91,17 +94,14 @@ def create_results(base, subtract):
     pyplot.xlabel('Amount of Pixels Horizontally')
     pyplot.ylabel('Amount of Pixels Vertically')
     fig.show()
-    canvas = FigureCanvasTkAgg(fig)
-    canvas.draw()
-    canvas.get_tk_widget().place(height=720, x=600, y=0)
 
+
+# Executing functions
 def main():
-    file_red = 'red.txt'
-    file_blue = 'blue.txt'
-
     file_formatting(f'{file_blue}', blue)
     file_formatting(f'{file_red}', red)
 
+    # If statements below enable positive and negative movement.
     if x_movement >= 0:
         moveX(blue, red, abs(x_movement))
     else:
@@ -113,5 +113,6 @@ def main():
         moveY(red, blue, abs(y_movement))
 
     create_results(blue, red)
+
 
 main()
