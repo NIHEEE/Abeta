@@ -1,21 +1,23 @@
-# The horizontal (x) and vertical (y) movement of the pictures.
-# Negative values are possible for movement into opposite direction.
-
-x_movement = 0
-y_movement = 0
-
-file_red = 'red.txt'
-file_blue = 'blue.txt'
-
-# Do not edit below!
-
 import linecache
 import matplotlib
 from matplotlib import pyplot
 import numpy as np
+from pathlib import Path
+
+# The horizontal (x) and vertical (y) movement of the pictures.
+# Negative values are possible for movement into opposite direction.
+# Red is moved down for positive values of y_movement.
+# Red is moved to the right for positive values of x_movement.
+
+x_movement = 0
+y_movement = 0
+
+file_red = ''
+file_blue = ''
+
+# Do not edit below!
 
 red, blue = [], []
-
 
 # Importing textfile, formatting it into arrays
 def file_formatting(txtfile_name, array):
@@ -79,21 +81,26 @@ def calculate_percentages(input_array):
     print(f'{len(a) / ((b - abs(x_movement)) * (b - abs(y_movement))) * 100}%')
 
 
-# Create results array and creating graphical image.
-def create_results(base, subtract):
-    result = np.subtract(np.array(subtract, dtype=float), np.array(base, dtype=float), dtype=float)
-    slicedresult = result[abs(y_movement):len(blue) - abs(y_movement), abs(x_movement):len(blue) - abs(x_movement)]
-
-    calculate_percentages(slicedresult)
-
+def create_image(array):
     # Creating image
     fig = pyplot.figure()
     colormap = matplotlib.colors.LinearSegmentedColormap.from_list('my_colormap', ['blue', 'white', 'red'], 256)
-    img2 = pyplot.imshow(slicedresult, cmap=colormap, clim=(-0.1, 0.1))
+    img2 = pyplot.imshow(array, cmap=colormap, clim=(-0.1, 0.1))
     pyplot.colorbar(img2, cmap=colormap)
     pyplot.xlabel('Amount of Pixels Horizontally')
     pyplot.ylabel('Amount of Pixels Vertically')
     fig.show()
+
+
+# Create results array and creating graphical image.
+def create_results(blue, red):
+    result = np.subtract(np.array(red, dtype=float), np.array(blue, dtype=float), dtype=float)
+    slicedresult = result[abs(y_movement):len(blue) - abs(y_movement), abs(x_movement):len(blue[0]) - abs(x_movement)]
+
+    calculate_percentages(slicedresult)
+    create_image(slicedresult)
+
+    writetext(slicedresult, 'output.txt')
 
 
 # Executing functions
