@@ -2,7 +2,6 @@ import linecache
 import matplotlib
 from matplotlib import pyplot
 import numpy as np
-from pathlib import Path
 
 # The horizontal (x) and vertical (y) movement of the pictures.
 # Negative values are possible for movement into opposite direction.
@@ -12,14 +11,26 @@ from pathlib import Path
 x_movement = 0
 y_movement = 0
 
-file_red = ''
-file_blue = ''
+# Insert input file directories below for red and blue respectively
+file_red = 'red.txt'
+file_blue = 'blue.txt'
+
+# If the resulting textfile is not wanted, change receive_textfile to False
+# The name of the resulting textfile is changeable, enter the wished name
+# between the '', such as 'result1'
+
+# Having two identical names for a textfile will overwrite the original textfile
+receive_textfile = True
+textfile_name = ''
 
 # Do not edit below!
+# ---------------------------------------------------------------
 
 red, blue = [], []
 
-# Importing textfile, formatting it into arrays
+
+# First for-loop, removes unnecessary whitespace
+# Second for-loop creates array matching the dimension of the textfile
 def file_formatting(txtfile_name, array):
     imported_array = linecache.getlines(txtfile_name)
     for line in imported_array:
@@ -35,6 +46,7 @@ def file_formatting(txtfile_name, array):
 
 
 # Movement of arrays horizontally where one of the arrays stays static
+# Zeros are appended into the array at index 0, moving the rest of the array by the amount of zeros.
 def moveX(arrayMoving, arrayStatic, pixelsAmount):
     for i in range(len(arrayStatic)):
         for c in range(pixelsAmount):
@@ -46,6 +58,7 @@ def moveX(arrayMoving, arrayStatic, pixelsAmount):
 
 
 # Movement of arrays vertically where one of the arrays stays static
+# Same concept as moveX
 def moveY(arrayMoving, arrayStatic, pixelsAmount):
     for a in range(pixelsAmount):
         arrayMoving.append([])
@@ -58,7 +71,7 @@ def moveY(arrayMoving, arrayStatic, pixelsAmount):
             arrayStatic[0].append(0)
 
 
-# Converting the image to a .txt file
+# Converting the image to a .txt file that has the same format as input text files
 def writetext(array, filename):
     with open(filename, 'w') as f:
         for i in range(len(array)):
@@ -81,8 +94,8 @@ def calculate_percentages(input_array):
     print(f'{len(a) / ((b - abs(x_movement)) * (b - abs(y_movement))) * 100}%')
 
 
+# Creating result image and displaying it.
 def create_image(array):
-    # Creating image
     fig = pyplot.figure()
     colormap = matplotlib.colors.LinearSegmentedColormap.from_list('my_colormap', ['blue', 'white', 'red'], 256)
     img2 = pyplot.imshow(array, cmap=colormap, clim=(-0.1, 0.1))
@@ -92,7 +105,7 @@ def create_image(array):
     fig.show()
 
 
-# Create results array and creating graphical image.
+# Create results array and calling functions to display graphical image.
 def create_results(blue, red):
     result = np.subtract(np.array(red, dtype=float), np.array(blue, dtype=float), dtype=float)
     slicedresult = result[abs(y_movement):len(blue) - abs(y_movement), abs(x_movement):len(blue[0]) - abs(x_movement)]
@@ -100,7 +113,8 @@ def create_results(blue, red):
     calculate_percentages(slicedresult)
     create_image(slicedresult)
 
-    writetext(slicedresult, 'output.txt')
+    if receive_textfile == True :
+        writetext(slicedresult, textfile_name)
 
 
 # Executing functions
@@ -108,7 +122,7 @@ def main():
     file_formatting(f'{file_blue}', blue)
     file_formatting(f'{file_red}', red)
 
-    # If statements below enable positive and negative movement.
+    # If statements below regulate positive and negative movement.
     if x_movement >= 0:
         moveX(blue, red, abs(x_movement))
     else:
@@ -122,4 +136,5 @@ def main():
     create_results(blue, red)
 
 
+# Runs program
 main()
