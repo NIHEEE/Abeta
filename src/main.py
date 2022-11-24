@@ -12,8 +12,8 @@ x_movement = 0
 y_movement = 0
 
 # Insert input file directories below for red and blue respectively
-file_red = 'red.txt'
-file_blue = 'blue.txt'
+file_red = 'C:/Users/Nihee/Code/ABeta/sample/red.txt'
+file_blue = 'C:/Users/Nihee/Code/ABeta/sample/blue.txt'
 
 # If the resulting textfile is not wanted, change receive_textfile to False
 # The name of the resulting textfile is changeable, enter the wished name
@@ -21,7 +21,7 @@ file_blue = 'blue.txt'
 
 # Having two identical names for a textfile will overwrite the original textfile
 receive_textfile = True
-textfile_name = ''
+textfile_name = 'hello.txt'
 
 # Do not edit below!
 # ---------------------------------------------------------------
@@ -89,9 +89,9 @@ def calculate_percentages(input_array):
     a = np.array(input_array)
     a[a > 0] = 0
     a = a[a != 0]
-    print(f'Amount of pixels > 0: {len(a)}')
     print(f'Amount of pixels in total {((b - abs(x_movement)) * (b - abs(y_movement)))}')
-    print(f'{len(a) / ((b - abs(x_movement)) * (b - abs(y_movement))) * 100}%')
+    print(f'Amount of pixels > 0: {len(a)}')
+    print(f'This corresponds to: {len(a) / ((b - abs(x_movement)) * (b - abs(y_movement))) * 100}%')
 
 
 # Creating result image and displaying it.
@@ -103,6 +103,8 @@ def create_image(array):
     pyplot.xlabel('Amount of Pixels Horizontally')
     pyplot.ylabel('Amount of Pixels Vertically')
     fig.show()
+    return fig
+
 
 
 # Create results array and calling functions to display graphical image.
@@ -119,6 +121,7 @@ def create_results(blue, red):
 
 # Executing functions
 def main():
+
     file_formatting(f'{file_blue}', blue)
     file_formatting(f'{file_red}', red)
 
