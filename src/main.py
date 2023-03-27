@@ -12,8 +12,8 @@ x_movement = 0
 y_movement = 0
 
 # Insert input file directories below for red and blue respectively
-file_red = 'C:/Users/Nihee/Code/ABeta/sample/red.txt'
-file_blue = 'C:/Users/Nihee/Code/ABeta/sample/blue.txt'
+file_red = '{filepath}'
+file_blue = '{filepath}'
 
 # If the resulting textfile is not wanted, change receive_textfile to False
 # The name of the resulting textfile is changeable, enter the wished name
