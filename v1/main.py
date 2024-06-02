@@ -8,7 +8,7 @@ import numpy as np
 # Red is moved down for positive values of y_movement.
 # Red is moved to the right for positive values of x_movement.
 
-x_movement = 0
+x_movement = 1
 y_movement = 0
 
 # Insert input file directories below for red and blue respectively
