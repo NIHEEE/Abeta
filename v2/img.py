@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from type import *
+import tkinter as tk
+from tkinter.filedialog import askopenfilename
 
 
 
@@ -13,14 +15,18 @@ class Img:
     def __init__(self):
         self.x_movement: int = 0
         self.y_movement: int = 0
-        self.red: np.ndarray = None
-        self.blue: np.ndarray = None
+        self.blue_path:str = 'sample/default_blue.csv'
+        self.red_path:str = 'sample/default_red.csv'
+        self.red: np.ndarray = np.genfromtxt(self.red_path, delimiter=',', skip_header=0)
+        self.blue: np.ndarray = np.genfromtxt(self.blue_path, delimiter=',', skip_header=0)
         self.red_result: np.ndarray = None
         self.blue_result: np.ndarray = None
         self.result: np.ndarray = None
         self.size_blue: int = None
         self.size_red: int = None
 
+    def set_blue_path(self) -> None:
+        self.blue_path = askopenfilename()
 
     def move(self, amount: int, type: type) -> None:
 
@@ -58,12 +64,12 @@ class Img:
         self.red_result = red_copy
 
     def set_blue(self) -> None:
-        self.blue = np.genfromtxt('sample/Blue2.csv', delimiter='\t', skip_header=0)
+        self.blue = np.genfromtxt('sample/default_blue.csv', delimiter=',', skip_header=0)
         self.size_blue = self.blue.shape[0]
         self.blue_result = self.blue
 
     def set_red(self) -> None:
-        self.red = np.genfromtxt('sample/Red2.csv', delimiter='\t', skip_header=0)
+        self.red = np.genfromtxt('sample/default_red.csv', delimiter=',', skip_header=0)
         self.size_red = self.red.shape[0]
         self.red_result = self.red
 
