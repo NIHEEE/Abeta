@@ -15,10 +15,10 @@ class Img:
     def __init__(self):
         self.x_movement: int = 0
         self.y_movement: int = 0
-        self.blue_path:str = 'sample/default_blue.csv'
-        self.red_path:str = 'sample/default_red.csv'
-        self.red: np.ndarray = np.genfromtxt(self.red_path, delimiter=',', skip_header=0)
-        self.blue: np.ndarray = np.genfromtxt(self.blue_path, delimiter=',', skip_header=0)
+        self.blue_path:str = 'sample/blue.csv'
+        self.red_path:str = 'sample/red.csv'
+        self.red: np.ndarray = np.genfromtxt(self.red_path, delimiter='\t', skip_header=0)
+        self.blue: np.ndarray = np.genfromtxt(self.blue_path, delimiter='\t', skip_header=0)
         self.red_result: np.ndarray = None
         self.blue_result: np.ndarray = None
         self.result: np.ndarray = None
